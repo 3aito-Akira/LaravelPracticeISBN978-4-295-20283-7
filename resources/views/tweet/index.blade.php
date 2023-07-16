@@ -31,6 +31,7 @@
     @foreach($tweets as $tweet)
         <details>
             <summary>{{ $tweet->content }} by {{ $tweet->user->name }}</summary>
+            @if(\Illuminate\Support\Facades\Auth::id() === $tweet->user_id)
             <div>
                 <a href="{{ route('tweet.update.index', ['tweetId' => $tweet->id]) }}">update</a>
                 <form action="{{ route('tweet.delete', ['tweetId' => $tweet->id]) }}" method="post">
@@ -39,6 +40,9 @@
                     <button type="submit">delete</button>
                 </form>
             </div>
+            @else
+                You can not update this tweet.
+            @endif
         </details>
     @endforeach
 </div>

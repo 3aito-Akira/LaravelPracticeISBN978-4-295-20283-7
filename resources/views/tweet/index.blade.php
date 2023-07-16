@@ -9,8 +9,12 @@
 </head>
 <body>
     <h1>つぶやきアプリ</h1>
+@auth
     <div>
         <p>input form</p>
+        @if(session('feedback.success'))
+        <p style="color: green">{{ session('feedback.success') }}</p>
+        @endif
         <form action="{{ route('tweet.create') }}" method="post">
             @csrf
             <label for="tweet-content">tweet</label>
@@ -22,20 +26,21 @@
             <button type="submit">submit</button>
         </form>
     </div>
-    <div>
-        @foreach($tweets as $tweet)
+@endauth
+<div>
+    @foreach($tweets as $tweet)
         <details>
-            <summary>{{ $tweet->content }}</summary>
+            <summary>{{ $tweet->content }} by {{ $tweet->user->name }}</summary>
             <div>
-                <a href="{{ route('tweet.update.index',['tweetId' => $tweet->id]) }}">update</a>
-                <form action="{{ route('tweet.delete',['tweetId' => $tweet->id]) }}" method="post">
+                <a href="{{ route('tweet.update.index', ['tweetId' => $tweet->id]) }}">update</a>
+                <form action="{{ route('tweet.delete', ['tweetId' => $tweet->id]) }}" method="post">
                     @method('DELETE')
                     @csrf
                     <button type="submit">delete</button>
                 </form>
             </div>
         </details>
-        @endforeach
-    </div>
+    @endforeach
+</div>
 </body>
 </html>

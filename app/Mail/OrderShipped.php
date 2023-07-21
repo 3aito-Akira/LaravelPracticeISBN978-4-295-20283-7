@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -10,20 +9,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewUserIntroduction extends Mailable
+class OrderShipped extends Mailable
 {
     use Queueable, SerializesModels;
-    public $subject = 'A new user has been added.';
-    public User $toUser;
-    public User $newUser;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(User $toUser, User $newUser)
+    public function __construct()
     {
-        $this->toUser = $toUser;
-        $this->newUser = $newUser;
+        //
     }
 
     /**
@@ -32,7 +27,7 @@ class NewUserIntroduction extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New User Introduction',
+            subject: 'Order Shipped',
         );
     }
 
@@ -42,7 +37,7 @@ class NewUserIntroduction extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'email.new_user_introduction',
+            markdown: 'emails.orders.shipped',
         );
     }
 

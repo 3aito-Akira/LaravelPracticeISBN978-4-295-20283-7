@@ -10,20 +10,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewUserIntroduction extends Mailable implements ShouldQueue
+class DailyTweetCount extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
-    public $subject = 'A new user has been added.';
-    public User $toUser;
-    public User $newUser;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(User $toUser, User $newUser)
+    public function __construct()
     {
-        $this->toUser = $toUser;
-        $this->newUser = $newUser;
+        //
     }
 
     /**
@@ -32,7 +28,7 @@ class NewUserIntroduction extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New User Introduction',
+            subject: 'Daily Tweet Count',
         );
     }
 
@@ -42,10 +38,7 @@ class NewUserIntroduction extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'email.new_user_introduction',
-            with: [
-                'newUser' => $this->newUser,
-            ],
+            view: 'view.name',
         );
     }
 

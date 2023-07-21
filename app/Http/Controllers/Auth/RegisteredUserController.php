@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Mail\NewUserIntroduction;
+use App\Mail\NewUserIntroductionM;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -51,7 +52,9 @@ class RegisteredUserController extends Controller
         $allUsers = User::get();
         foreach($allUsers as $user){
             $mailer->to($user->email)->send(new NewUserIntroduction($user,$newUser));
+            //$mailer->to($user->email)->send(new NewUserIntroductionM($user,$newUser));
         }
+        //$mailer->to('test@example.com')->send(new NewUserIntroduction($user,$newUser));
 
         return redirect(RouteServiceProvider::HOME);
     }

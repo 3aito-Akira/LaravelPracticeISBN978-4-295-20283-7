@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -9,16 +10,20 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OrderShipped extends Mailable
+class NewUserIntroductionMarkDown extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
+    public $subject = 'A new user has been added.';
+    public User $toUser;
+    public User $newUser;
 
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(User $toUser, User $newUser)
     {
-        //
+        $this->toUser = $toUser;
+        $this->newUser = $newUser;
     }
 
     /**
@@ -27,7 +32,7 @@ class OrderShipped extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Order Shipped',
+            subject: 'New User Introduction Mark Down',
         );
     }
 
@@ -37,7 +42,10 @@ class OrderShipped extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.orders.shipped',
+            markdown: 'email.new_user_introduction',
+            with: [
+                'url' => route('tweet.index'),
+            ],
         );
     }
 

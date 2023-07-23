@@ -14,12 +14,16 @@ class DailyTweetCount extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public User $toUser;
+    public int $count;
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(User $toUser, int $count)
     {
-        //
+        $this->toUser = $toUser;
+        $this->count = $count;
     }
 
     /**
@@ -28,7 +32,7 @@ class DailyTweetCount extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Daily Tweet Count',
+            subject: "昨日は{$this->count}件のつぶやきが追加されました！",
         );
     }
 
@@ -38,7 +42,7 @@ class DailyTweetCount extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'email.daily_tweet_count',
         );
     }
 

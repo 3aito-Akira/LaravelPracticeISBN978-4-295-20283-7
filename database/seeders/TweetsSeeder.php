@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\Tweet;
+use App\Models\Image;
 
 class TweetsSeeder extends Seeder
 {
@@ -16,6 +17,7 @@ class TweetsSeeder extends Seeder
     public function run(): void
     {
         //DB::table('tweets')->insert(['content' => Str::random(100),'created_at' => now(),'updated_at' => now(),]);
-        Tweet::factory()->count(10)->create();
+        Tweet::factory()->count(10)->create()
+        ->each(fn($tweet) =>Image::factory()->count(4)->create()->each(fn($image) =>$tweet->images()->attach($image->id)));
     }
 }

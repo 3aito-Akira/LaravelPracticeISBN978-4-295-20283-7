@@ -4,6 +4,10 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\Image;
+use App\Models\Tweet;
+use App\Models\TweetImage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,5 +23,12 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call([UsersSeeder::class, TweetsSeeder::class]);
+        /*
+        User::truncate();
+        Image::truncate();
+        Tweet::truncate();
+        TweetImage::truncate();
+        */
+
     }
 }

@@ -7,9 +7,12 @@ use Carbon\Carbon;
 use App\Models\Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 class TweetService
 {
+
     public function getTweets()
     {
         return Tweet::with('images')->orderBy('created_at','DESC')->get();
@@ -38,15 +41,31 @@ class TweetService
             $tweet->user_id = $userId;
             $tweet->content = $content;
             $tweet->save();
-            foreach ($images as $image) {
+
+            foreach ($images as $image) {               
                 Storage::putFile('public/images', $image);
                 $imageModel = new Image();
-                $imageModel->name = $image->hashName();
+                $imageModel->pathName = $image->hashName();
                 $imageModel->save();
                 $tweet->images()->attach($imageModel->id);
             }
         });
     }
 
-    
+    public function deleteTweet(int $tweetId)
+    {
+        DB::transaction(function () use ($tweetId){
+            $tweet = Tweet::where('id',$tweetId)->firstOrFail();
+            $tweet->images()->each(function ($image) use ($tweet){
+                $filePath = 'public/images' . $image->pathName;
+                if(Storage::exists($filePath)){
+                    Storage::delete($filePath);
+                }
+                $tweet->images()->detach($image->id);
+                $image->delete();
+            });
+
+            $tweet->delete();
+        });
+    }
 }
